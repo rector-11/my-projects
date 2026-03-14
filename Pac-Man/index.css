@@ -1,0 +1,17 @@
+canvas {
+    width: 100%;
+    max-width: 90vh;
+    max-height: 90vh;
+}
+
+.hidden {
+    display: none;
+}
+
+#bigdiv {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
