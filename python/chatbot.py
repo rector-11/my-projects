@@ -7,6 +7,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder 
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
+import gradio as gr
 load_dotenv()
 
 llm_model = "gpt-5-nano"
@@ -15,7 +16,7 @@ history = []
 # chain: prompt | llm | str
 now = datetime.now()
 day = date.today()
-name = "TEST"
+name = "user"
 
 prompt = ChatPromptTemplate([
     ("system", (
@@ -36,18 +37,16 @@ memory = ConversationBufferWindowMemory(llm=llm)
 chain = prompt | llm 
 
 
-if __name__ == "__main__" :
-    print (now, day)
-    user = input("\nAsk a question or insert prompt here. Prompt chat with 'quit' to end chat.\n \nUser:")
-    while True: 
-        history.append(HumanMessage(content=user))
-        if "quit" in user:
-            break 
-        response = chain.invoke({"input": user, "history": history} )
-        print("\nChatGPT: " + str(response.content) + "\n")
-        history.append(AIMessage(content=response.content))
-        user = input("User: ")
+def chat(user_input, gradio_history):
+    history.append(HumanMessage(content=user_input))
+    response = chain.invoke({"input": user_input, "history": history})
+    history.append(AIMessage(content=response.content))
+    return response.content
+
+
+if __name__ == "__main__":
+    print(now, day)
+    gr.ChatInterface(fn=chat, title="Chatbot", type="messages").launch()
 
 ## tokens tell:
 ## how much compute, cost, resources, environmental effects
-        
