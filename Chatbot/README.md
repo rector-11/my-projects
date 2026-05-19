@@ -4,7 +4,6 @@ This is a simple AI chatbot that can be run in the web browser, using an OpenAI 
 OpenAI API key in order to run the chatbot.
 
 **USE YOUR OWN API KEY**
-
 You will need to create your own .env file with a current API key to run this code.
 In the .env file, you must name the API key: OPENAI_API_KEY = 'sk-'
 

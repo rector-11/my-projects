@@ -9,15 +9,15 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
 import gradio as gr
 load_dotenv()
-
+ 
 llm_model = "gpt-5-nano"
 history = []
-
+ 
 # chain: prompt | llm | str
 now = datetime.now()
 day = date.today()
 name = "user"
-
+ 
 prompt = ChatPromptTemplate([
     ("system", (
         f'''
@@ -42,11 +42,12 @@ def chat(user_input, gradio_history):
     response = chain.invoke({"input": user_input, "history": history})
     history.append(AIMessage(content=response.content))
     return response.content
-
-
+ 
+ 
 if __name__ == "__main__":
     print(now, day)
-    gr.ChatInterface(fn=chat, title="Chatbot", type="messages").launch()
-
+    gr.ChatInterface(fn=chat, title="Chatbot", type="tuples", fill_height=True, theme=gr.themes.Monochrome(), chatbot=gr.Chatbot(height=400, scale=1)).launch()
+ 
 ## tokens tell:
 ## how much compute, cost, resources, environmental effects
+ 
