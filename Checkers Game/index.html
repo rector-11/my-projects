@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkers Game</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #222;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #turnContainer {
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+
+    #turnbox {
+      font-weight: bold;
+      color: gold;
+    }
+
+    canvas {
+      border: 4px solid white;
+      background-color: gray;
+      display: block;
+      margin: auto;
+    }
+
+    .instructions {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Checkers</h1>
+
+  <div id="turnContainer">
+    Current Turn: <span id="turnbox">Red</span>
+  </div>
+
+  <canvas id="checkersBoard" width="500" height="500"></canvas>
+
+  <div class="instructions">
+    Click a piece, then click where you want to move it.
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
