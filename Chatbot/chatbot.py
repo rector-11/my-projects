@@ -8,22 +8,23 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
 import gradio as gr
-load_dotenv()
- 
+
+##config 
 llm_model = "gpt-5-nano"
 history = []
- 
-# chain: prompt | llm | str
 now = datetime.now()
 day = date.today()
 name = "user"
+load_dotenv()
  
-prompt = ChatPromptTemplate([
+
+# chain: prompt | llm | str
+
+prompt = ChatPromptTemplate.from_messages([
     ("system", (
         f'''
         You are an assistant. \n 
         Your user is in the San Francisco Bay Area. \n
-        The time is {now}, and the date is {day}. \n
         You should address the user by {name} \n 
         '''
     )),
@@ -31,7 +32,7 @@ prompt = ChatPromptTemplate([
     ("human", "{input}"),
 ])         
 
-llm = ChatOpenAI(model = llm_model, temperature = 0.7)
+llm = ChatOpenAI(model = llm_model, temperature=1.0)
 memory = ConversationBufferWindowMemory(llm=llm)
 
 chain = prompt | llm 
