@@ -7,7 +7,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder 
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
-from langchain.agents import create_agent
+from langchain.agents import create_openai_tools_agent, AgentExecutor 
 from langchain.tools import tool
 import gradio as gr
 
@@ -25,19 +25,27 @@ def timetool():
     """Get the current time"""
     return f"Time now: {str(datetime.now())}"
 
-agent = create_agent(
-    model = llm_model, 
-    tools = [timetool], 
-    system_prompt = f'''
-        You are an assistant. 
-        You have access to one tool, called "timetool". It can get the current date and time at the user's location.
-        You should address the user by {name}.
-    '''
-    )
-
-
+tools = [timetool]
+llm_model = "gpt-5-nano"
 llm = ChatOpenAI(model = llm_model, temperature = 0.7)
-memory = ConversationBufferWindowMemory(llm=llm)
+
+# Init
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant equipped with tools"),
+    ("human", "{input}"),
+    MessagesPlaceholder(variable_name="agent_scratchpad")
+])
+
+agent = create_openai_tools_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+
+userinput = input("Enter prompt...\n")
+response = agent_executor.invoke({"input": userinput})
+print(response["output"])
+
+# llm = ChatOpenAI(model = llm_model, temperature = 0.7)
+# memory = ConversationBufferWindowMemory(llm=llm)
 
 # chain = prompt | llm 
 
