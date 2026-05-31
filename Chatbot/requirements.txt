@@ -1,5 +1,5 @@
-langchain<0.2.0
+langchain
 langchain-openai
 python-dotenv
-gradio>=4.0.0,<5.0.0
-
+gradio
+geocoder

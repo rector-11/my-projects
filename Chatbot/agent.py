@@ -1,62 +1,73 @@
 import os 
-from langchain.memory import ConversationBufferWindowMemory
-from langchain_community.chat_models import ChatOpenAI
+import geocoder
 from datetime import datetime, date, timedelta
 from dotenv import load_dotenv 
-from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder 
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
-from langchain.agents import create_openai_tools_agent, AgentExecutor 
+
+# 1. FIXED: Correct LangChain/LangGraph agent import
+from langchain.agents import create_agent
 from langchain.tools import tool
+
+# 2. FIXED: Correct partner package import for ChatOpenAI
+from langchain_openai import ChatOpenAI
 import gradio as gr
 
-##config 
-llm_model = "gpt-5-nano"
+## config 
+llm_model = "gpt-4o"  # Note: Use your valid OpenAI model name here
 history = []
 now = datetime.now()
 day = date.today()
 name = "user"
 load_dotenv()
  
-#tools 
+
+def get_user_location():
+        g = geocoder.ip("me")
+
+        return {
+             "city": g.city,
+             "state": g.state,
+             "country": g.country,
+             "latlng": g.latlng
+        }
+# tools 
 @tool 
-def timetool():
+def timetool() -> str:
     """Get the current time"""
     return f"Time now: {str(datetime.now())}"
 
-tools = [timetool]
-llm_model = "gpt-5-nano"
-llm = ChatOpenAI(model = llm_model, temperature = 0.7)
+@tool
+def datetool() -> str:
+    """Get the current date"""
+    return f"Today's date: {str(date.today)}"
+
+@tool
+def locationtool() -> str:
+     """Access the user's location"""
+     return f"Location: {get_user_location()}"
+
+
+tools = [timetool, datetool, locationtool]
+
+# 3. FIXED: Create the LLM object correctly
+llm = ChatOpenAI(model=llm_model, temperature=0.7)
+user = "Rohan"
 
 # Init
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful assistant equipped with tools"),
-    ("human", "{input}"),
-    MessagesPlaceholder(variable_name="agent_scratchpad")
-])
+agent = create_agent(
+    model=llm,  # 4. FIXED: Pass the actual LLM instance object, not a string string name
+    tools=tools,
+    system_prompt=f"You are a helpful assistant. Always address the user by {user}.",
+)
 
-agent = create_openai_tools_agent(llm, tools, prompt)
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+userinput = input("Ask me anything...\n")
 
+response = agent.invoke({
+    "messages": [
+        {"role": "user", "content": userinput}
+    ]
+})
 
-userinput = input("Enter prompt...\n")
-response = agent_executor.invoke({"input": userinput})
-print(response["output"])
-
-# llm = ChatOpenAI(model = llm_model, temperature = 0.7)
-# memory = ConversationBufferWindowMemory(llm=llm)
-
-# chain = prompt | llm 
-
-
-# def chat(user_input, gradio_history):
-#     history.append(HumanMessage(content=user_input))
-#     response = chain.invoke({"input": user_input, "history": history})
-#     history.append(AIMessage(content=response.content))
-#     return response.content
- 
- 
-# if __name__ == "__main__":
-#     print(now, day)
-#     gr.ChatInterface(fn=chat, title="Chatbot", type="tuples", fill_height=True, theme=gr.themes.Monochrome(), chatbot=gr.Chatbot(height=400, scale=1)).launch()
+print(response["messages"][-1].content)
