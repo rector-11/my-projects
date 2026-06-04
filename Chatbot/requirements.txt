@@ -3,3 +3,4 @@ langchain-openai
 python-dotenv
 gradio
 geocoder
+langchain_tavily
