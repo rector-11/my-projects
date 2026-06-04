@@ -15,3 +15,8 @@ The chatbot should provide a link in the terminal, and the agent will directly p
 ## Customization
 
 You can customize the chatbot to address you by your name by changing the "name" variable. By default, it will address the user as "user". You can get location-specific and customized answers, as well as tailor the chatbot to your needs by chagning the prompt. All of this can be done in the chatbot.py file.
+
+# Development
+
+1. Expanding tools and functionality
+2. Implement **Gradio** chat interface (later switch to Java+HTML frontend)
