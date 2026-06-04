@@ -1,6 +1,7 @@
 import os
 import geocoder
 import requests
+import time
 from datetime import datetime, date
 from dotenv import load_dotenv
 
@@ -25,7 +26,6 @@ history = InMemoryChatMessageHistory()
 
 search = TavilySearch(max_results=5)
 
-
 def get_user_location():
     g = geocoder.ip("me")
     return {
@@ -34,7 +34,6 @@ def get_user_location():
         "country": g.country,
         "latlng": g.latlng
     }
-
 
 @tool
 def timetool() -> str:
@@ -61,6 +60,7 @@ def websearch(query: str) -> str:
     return f"Result: {searchresult}"
 
 
+## CANVAS TOOLS
 @tool
 def get_assignments() -> str:
     """Check the user's upcoming Canvas Assignments"""
