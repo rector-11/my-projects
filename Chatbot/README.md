@@ -19,4 +19,4 @@ You can customize the chatbot to address you by your name by changing the "name"
 # Development
 
 1. Expanding tools and functionality
-2. Implement **Gradio** chat interface (later switch to Java+HTML frontend)
+2. Implement **Gradio** chat interface
