@@ -9,6 +9,7 @@ In the .env file, you must name the API key: OPENAI_API_KEY = 'sk-'
 
 ## Running the chatbot/agent
 
+In terminal, 
 1. Run "pip install -r requirements.txt"
 2. Run "make dev" in terminal
 
