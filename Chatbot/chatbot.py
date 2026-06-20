@@ -1,5 +1,5 @@
 import os 
-from langchain.memory import ConversationBufferWindowMemory
+from langchain_community.memory import ConversationBufferWindowMemory
 from langchain_community.chat_models import ChatOpenAI
 from datetime import datetime, date, timedelta
 from dotenv import load_dotenv 
