@@ -75,7 +75,7 @@ function Chat() {
     setError('');
     setMessages((currentMessages) => [
       ...currentMessages,
-      { role: 'agent', content: 'Chat ended. The agent is going offline.' },
+      { role: 'agent', content: 'Chat ended.' },
     ]);
 
     try {
