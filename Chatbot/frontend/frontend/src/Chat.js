@@ -101,7 +101,7 @@ function Chat() {
       <section className="chat-shell" aria-label="AI agent chat">
         <header className="chat-header">
           <div>
-            <p className="chat-eyebrow">{isOffline ? 'Offline agent' : 'Online agent'}</p>
+            <p className="chat-eyebrow">{isOffline ? 'Agent offline' : 'Agent online'}</p>
             <h1>Agent</h1>
           </div>
           <div className="header-actions">
@@ -114,7 +114,7 @@ function Chat() {
               onClick={handleEndChat}
               disabled={isEndingChat || isOffline}
             >
-              {isEndingChat ? 'Ending...' : 'End Chat'}
+              {isEndingChat ? 'Ending Chat...' : 'End Chat'}
             </button>
           </div>
         </header>
