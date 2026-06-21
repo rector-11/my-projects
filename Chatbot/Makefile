@@ -7,7 +7,7 @@ BACKEND_PORT := 8000
 .PHONY: backend frontend dev open stop
 
 backend:
-	cd $(BACKEND_DIR) && python3 -m uvicorn agent:app --reload
+	cd $(BACKEND_DIR) && ENABLE_SHUTDOWN=true python3 -m uvicorn agent:app --reload
 
 frontend:
 	(sleep 2 && open $(FRONTEND_URL)) &

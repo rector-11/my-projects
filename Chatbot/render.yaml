@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: rohan-chatbot-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && uvicorn agent:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: ALLOWED_ORIGINS
+        value: https://rohan-chatbot-web.onrender.com
+      - key: ENABLE_SHUTDOWN
+        value: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: CANVAS_TOKEN
+        sync: false
+      - key: CANVAS_URL
+        sync: false
+
+  - type: static
+    name: rohan-chatbot-web
+    rootDir: frontend/frontend
+    plan: free
+    buildCommand: npm ci && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://rohan-chatbot-api.onrender.com

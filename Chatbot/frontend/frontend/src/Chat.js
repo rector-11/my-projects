@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const CAN_END_CHAT = API_BASE_URL.includes('localhost') || API_BASE_URL.includes('127.0.0.1');
+
 export function renderMessageContent(content) {
   return content.split(/(\*\*[^*]+\*\*)/g).map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
@@ -41,7 +44,7 @@ function Chat() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
+      const response = await fetch(`${API_BASE_URL}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +82,7 @@ function Chat() {
     ]);
 
     try {
-      await fetch('http://localhost:8000/shutdown', {
+      await fetch(`${API_BASE_URL}/shutdown`, {
         method: 'POST',
       });
     } catch {
@@ -108,14 +111,16 @@ function Chat() {
             <span className={`status-pill ${isOffline ? 'offline' : ''}`}>
               {isOffline ? 'Offline' : 'FastAPI'}
             </span>
-            <button
-              className="end-chat-button"
-              type="button"
-              onClick={handleEndChat}
-              disabled={isEndingChat || isOffline}
-            >
-              {isEndingChat ? 'Ending Chat...' : 'End Chat'}
-            </button>
+            {CAN_END_CHAT && (
+              <button
+                className="end-chat-button"
+                type="button"
+                onClick={handleEndChat}
+                disabled={isEndingChat || isOffline}
+              >
+                {isEndingChat ? 'Ending Chat...' : 'End Chat'}
+              </button>
+            )}
           </div>
         </header>
 

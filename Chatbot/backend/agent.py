@@ -21,6 +21,12 @@ load_dotenv()
 
 CANVAS_TOKEN = os.getenv("CANVAS_TOKEN")
 CANVAS_URL = os.getenv("CANVAS_URL")
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    if origin.strip()
+]
+ENABLE_SHUTDOWN = os.getenv("ENABLE_SHUTDOWN", "false").lower() == "true"
 
 HEADERS = {
     "Authorization": f"Bearer {CANVAS_TOKEN}"
@@ -140,7 +146,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -199,6 +205,9 @@ def chat(msg: Message):
 
 @app.post("/shutdown")
 def shutdown():
+    if not ENABLE_SHUTDOWN:
+        raise HTTPException(status_code=403, detail="Shutdown is disabled.")
+
     threading.Thread(target=shutdown_app, daemon=True).start()
     return {"message": "Agent is going offline."}
 

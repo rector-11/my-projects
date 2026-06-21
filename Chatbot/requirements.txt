@@ -4,4 +4,7 @@ python-dotenv
 gradio
 geocoder
 langchain_tavily
-langchian_community
+langchain-community
+fastapi
+uvicorn
+requests
